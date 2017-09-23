@@ -5,8 +5,10 @@
 #include <sys/wait.h>
 #include "forkAndExecute.h"
 
-char * concatenate(char**userIn,char*path, int tArrLength,
+void concatenate(char**userIn,char*path, int tArrLength,
 		int * tokenLengthsArr, int pathLength);
+
+char *concat;
 /**/
 int forkAndExecute(char**argv,int tArrLength,int * tokenLengthsArr){
 	//	char *args[2];
@@ -23,11 +25,14 @@ int forkAndExecute(char**argv,int tArrLength,int * tokenLengthsArr){
 		if(retVal == -1){
 			//			printf("Tried concat \n");
 			int pathLength1 = 5;
-			char *concatenated;
-			concatenated=concatenate(argv,envp[0],tArrLength,
+
+
+			concatenate(argv,envp[0],tArrLength,
 					tokenLengthsArr,pathLength1);
+			char *concatenated = concat;
+			//printf("After concatenation: %s \n", concat);
 			//			printf("was inside concat \n");
-			retVal2 = execve(concatenated,&concatenated,envp2);
+			retVal2 = execve(concat,&concat,envp2);
 		}
 //		if(retVal2 == -1){
 //			printf("Tried hello \n");
@@ -41,6 +46,7 @@ int forkAndExecute(char**argv,int tArrLength,int * tokenLengthsArr){
 		close(1);
 		exit(2);
 	} else { 			/* parent */
+		//free(concat);
 		int waitVal, waitStatus;
 		waitVal = waitpid(pid, &waitStatus, 0);
 		if (waitVal == pid) {
@@ -52,10 +58,9 @@ int forkAndExecute(char**argv,int tArrLength,int * tokenLengthsArr){
 	}
 }
 
-char * concatenate(char**userIn,char*path, int tArrLength,
+void concatenate(char**userIn,char*path, int tArrLength,
 		int * tokenLengthsArr, int pathLength){
 	//	printf("Was in concat \n");
-	char *concat;
 	char buff[1000];
 	int i =0;
 	for(; i<pathLength && path[i]!= '\0';i++){
@@ -70,8 +75,7 @@ char * concatenate(char**userIn,char*path, int tArrLength,
 	buff[i]='\0';
 	concat = malloc(i);
 	concat = buff;
-	//	printf("After concatenation: %s \n", concatenated);
-	return concat;
+	//printf("After concatenation(still in func): %s \n", concat);
 }
 
 
