@@ -5,10 +5,10 @@
 #include <sys/wait.h>
 #include "forkAndExecute.h"
 
-void concatenate(char**userIn,char*path, int tArrLength,
+char* concatenate(char**userIn,char*path, int tArrLength,
 		int * tokenLengthsArr, int pathLength);
+char buff[1000];
 
-char *concat;
 /**/
 int forkAndExecute(char**argv,int tArrLength,int * tokenLengthsArr){
 	//	char *args[2];
@@ -25,11 +25,12 @@ int forkAndExecute(char**argv,int tArrLength,int * tokenLengthsArr){
 		if(retVal == -1){
 			//			printf("Tried concat \n");
 			int pathLength1 = 5;
+			char *concat;
 
 
-			concatenate(argv,envp[0],tArrLength,
+			concat=concatenate(argv,envp[0],tArrLength,
 					tokenLengthsArr,pathLength1);
-			char *concatenated = concat;
+			
 			//printf("After concatenation: %s \n", concat);
 			//			printf("was inside concat \n");
 			retVal2 = execve(concat,&concat,envp2);
@@ -58,10 +59,10 @@ int forkAndExecute(char**argv,int tArrLength,int * tokenLengthsArr){
 	}
 }
 
-void concatenate(char**userIn,char*path, int tArrLength,
+char* concatenate(char**userIn,char*path, int tArrLength,
 		int * tokenLengthsArr, int pathLength){
 	//	printf("Was in concat \n");
-	char buff[1000];
+	
 	int i =0;
 	for(; i<pathLength && path[i]!= '\0';i++){
 		buff[i]=path[i];
@@ -73,9 +74,9 @@ void concatenate(char**userIn,char*path, int tArrLength,
 		}
 	}
 	buff[i]='\0';
-	concat = malloc(i);
-	concat = buff;
-	//printf("After concatenation(still in func): %s \n", concat);
+	//concat = malloc(i);
+	//printf("After concatenation(still in func): %s \n", buff  );
+	return buff;
 }
 
 
