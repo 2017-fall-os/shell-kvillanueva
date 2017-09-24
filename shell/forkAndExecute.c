@@ -17,7 +17,7 @@ int forkAndExecute(char**argv,int tArrLength,int * tokenLengthsArr){
 	int pid;
 	int retVal=0;
 	int retVal2=0;
-	char *envp[] = {"/bin/","helloWorld=helloWorld.o",NULL};
+	char *envp[] = {"/bin/",NULL};
 	char *envp2[] = {NULL};
 	pid = fork();
 	if (pid == 0) {		/* child */
