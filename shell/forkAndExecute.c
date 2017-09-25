@@ -13,7 +13,7 @@ char* concatenate(char**userIn,char*path, int tArrLength,
 		int * tokenLengthsArr, int pathLength);
 char buff[1000];
 
-/**/
+/*Forks and attempts to execute instructions*/
 int forkAndExecute(char**argv,int tArrLength,int * tokenLengthsArr){
 	int pid;
 	int retVal=0;
@@ -21,7 +21,9 @@ int forkAndExecute(char**argv,int tArrLength,int * tokenLengthsArr){
 	char *envp[] = {getenv("PWD"),"/bin/",NULL};
 	pid = fork();
 	if (pid == 0) {		/* child */
+		/*Attempts to execute /bin type commands*/
 		retVal = execve(argv[0],&argv[0],envp);
+		/*Attempts to execute single input commands (e.g. ls)*/
 		if(retVal == -1){
 			int pathLength1 = 5;
 			char *concat;
@@ -30,6 +32,7 @@ int forkAndExecute(char**argv,int tArrLength,int * tokenLengthsArr){
 			// printf("After concatenation: %s \n", concat);
 			retVal2 = execve(concat,&concat,envp);
 		}
+		/*Attempts to execute hi command for executable helloWorld.c*/
 		if(retVal2 == -1 && argv[0][0]=='h'&&argv[0][1]=='i'&&tArrLength<3){
 			int retVal3 = execve("./helloWorld",&argv[0],envp);
 		}
@@ -50,6 +53,7 @@ int forkAndExecute(char**argv,int tArrLength,int * tokenLengthsArr){
 	}
 }
 
+/*Concatenates input string to run single input commands (e.g. ls)*/
 char* concatenate(char**userIn,char*path, int tArrLength,
 		int * tokenLengthsArr, int pathLength){
 	int i =0;
