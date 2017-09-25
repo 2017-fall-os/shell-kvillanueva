@@ -11,34 +11,28 @@ char buff[1000];
 
 /**/
 int forkAndExecute(char**argv,int tArrLength,int * tokenLengthsArr){
-	//	char *args[2];
-	//	args[0] = &argv[0][0];
-	//	args[1] = &argv[1][0];
 	int pid;
 	int retVal=0;
 	int retVal2=0;
 	char *envp[] = {"/bin/",NULL};
 	char *envp2[] = {NULL};
+	char *envp3[]= {};
 	pid = fork();
 	if (pid == 0) {		/* child */
 		retVal = execve(argv[0],&argv[0],envp);
 		if(retVal == -1){
-			//			printf("Tried concat \n");
 			int pathLength1 = 5;
 			char *concat;
-
-
 			concat=concatenate(argv,envp[0],tArrLength,
 					tokenLengthsArr,pathLength1);
 			
 			//printf("After concatenation: %s \n", concat);
-			//			printf("was inside concat \n");
 			retVal2 = execve(concat,&concat,envp2);
 		}
-//		if(retVal2 == -1){
-//			printf("Tried hello \n");
-//			int retVal3 = execve("helloWorld.o",&argv[0],envp);
-//		}
+		if(retVal2 == -1 && argv[0][0]=='h'&&argv[0][1]=='i'){
+			printf("Tried hello \n");
+			int retVal3 = execve("./helloWorld",&argv[0],envp);
+		}
 		//		if(retVal == -1){
 		//			execvp(argv[0],&argv[0]);
 		//		}
@@ -47,7 +41,6 @@ int forkAndExecute(char**argv,int tArrLength,int * tokenLengthsArr){
 		close(1);
 		exit(2);
 	} else { 			/* parent */
-		//free(concat);
 		int waitVal, waitStatus;
 		waitVal = waitpid(pid, &waitStatus, 0);
 		if (waitVal == pid) {
@@ -61,7 +54,6 @@ int forkAndExecute(char**argv,int tArrLength,int * tokenLengthsArr){
 
 char* concatenate(char**userIn,char*path, int tArrLength,
 		int * tokenLengthsArr, int pathLength){
-	//	printf("Was in concat \n");
 	
 	int i =0;
 	for(; i<pathLength && path[i]!= '\0';i++){
@@ -74,7 +66,6 @@ char* concatenate(char**userIn,char*path, int tArrLength,
 		}
 	}
 	buff[i]='\0';
-	//concat = malloc(i);
 	//printf("After concatenation(still in func): %s \n", buff  );
 	return buff;
 }
