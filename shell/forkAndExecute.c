@@ -14,28 +14,24 @@ int forkAndExecute(char**argv,int tArrLength,int * tokenLengthsArr){
 	int pid;
 	int retVal=0;
 	int retVal2=0;
-	char *envp[] = {"/bin/",NULL};
+	// char *envp[] = {"/bin/",NULL};
 	char *envp2[] = {NULL};
 	char *envp3[]= {};
 	pid = fork();
 	if (pid == 0) {		/* child */
-		retVal = execve(argv[0],&argv[0],envp);
+		retVal = execve(argv[0],&argv[0],envp2);
 		if(retVal == -1){
 			int pathLength1 = 5;
 			char *concat;
-			concat=concatenate(argv,envp[0],tArrLength,
+			concat=concatenate(argv,"/bin/",tArrLength,
 					tokenLengthsArr,pathLength1);
-			
 			//printf("After concatenation: %s \n", concat);
 			retVal2 = execve(concat,&concat,envp2);
 		}
 		if(retVal2 == -1 && argv[0][0]=='h'&&argv[0][1]=='i'){
-			printf("Tried hello \n");
-			int retVal3 = execve("./helloWorld",&argv[0],envp);
+			int retVal3 = execve("./helloWorld",&argv[0],envp2);
 		}
-		//		if(retVal == -1){
-		//			execvp(argv[0],&argv[0]);
-		//		}
+		
 		printf("command not found \n");
 		printf("Program terminated with exit code %d. \n", retVal);
 		close(1);
