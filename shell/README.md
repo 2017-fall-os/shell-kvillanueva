@@ -23,3 +23,4 @@ however calls to some commands, such as date, return some errors.
 •Run: After compilation, type ./test, and the program will run.
 •Test: Commands of the type /bin/ls wokr correctly. Single commands of the type ls do not mirror /bin commands. 
 Enterring hi will test running an executable file. 
+•Type exit to exit shell

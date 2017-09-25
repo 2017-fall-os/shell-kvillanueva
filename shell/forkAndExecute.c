@@ -18,7 +18,7 @@ int forkAndExecute(char**argv,int tArrLength,int * tokenLengthsArr){
 	int pid;
 	int retVal=0;
 	int retVal2=0;
-	char *envp[] = {getenv("PWD"),"/bin/",NULL};
+	char *envp[] = {getenv("PWD"),NULL};
 	pid = fork();
 	if (pid == 0) {		/* child */
 		/*Attempts to execute /bin type commands*/
