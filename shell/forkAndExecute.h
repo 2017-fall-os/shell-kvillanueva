@@ -1,8 +1,6 @@
-/*
- * forkAndExecute.h
- *
- *  Created on: Sep 23, 2017
- *      Author: krizz
+/*Lab2: Shell-Part1
+  Name: Kristian Villanueva
+  Last Modification: 9/24/17
  */
 
 #ifndef FORKANDEXECUTE_H_

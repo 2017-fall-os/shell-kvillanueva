@@ -1,6 +1,6 @@
-/*Lab1: Tokenizer
+/*Lab2: Shell-Part1
   Name: Kristian Villanueva
-  Last Modification: 9/11/17
+  Last Modification: 9/24/17
  */
 #ifndef MYTOC_H_
 #define MYTOC_H_

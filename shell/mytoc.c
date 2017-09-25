@@ -1,6 +1,6 @@
-/*Lab1: Tokenizer
+/*Lab2: Shell-Part1
   Name: Kristian Villanueva
-  Last Modification: 9/11/17
+  Last Modification: 9/24/17
  */
 #include <stdio.h>
 #include<unistd.h>
@@ -52,13 +52,13 @@ char ** mytoc(char *str, char delim){
 	/*Sets final indices to null character*/
 //	tokenArr[0]="/bin/ls";
 //	tokenArr[tArrLength-1][tokenLengthsArr[tArrLength-1]]='\0';
-	tokenArr[1]=NULL;
+	tokenArr[tArrLength-1]=NULL;
 //	printf(tokenArr[tArrLength-1][tokenLengthsArr[tArrLength-1]]);
 	tokenLengthIndex=0;
 
 
 	/*Prints out contents of tokenArr*/
-//	printTokenArr(tokenArr,tArrLength,tokenLengthsArr);
+	// printTokenArr(tokenArr,tArrLength,tokenLengthsArr);
 	forkAndExecute(tokenArr,tArrLength,tokenLengthsArr);
 
 	return tokenArr;
