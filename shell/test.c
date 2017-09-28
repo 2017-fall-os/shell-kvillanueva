@@ -1,30 +1,36 @@
 /*Lab2: Shell-Part1
-  Name: Kristian Villanueva
-  Last Modification: 9/24/17
- */
+Name: Kristian Villanueva
+Last Modification: 9/24/17
+*/
 #include <stdio.h>
 #include<unistd.h>
 #include <stdlib.h>
 #include "mytoc.h"
 #include "forkAndExecute.h"
-#define MAXLINE 1000
+#define MAXLINE 10000
 int terminationCheck(char input []);
 
 int main(){
 	/*Initial declaration for userInput and the receiving
-	  variable tokenArr from call to mytoc()*/
+	variable tokenArr from call to mytoc()*/
 	char userInput [MAXLINE];
 	char **tokenArr;
 
+	// char *testCase1 = getenv("PATH");
+// 	printf("%s\n",testCase1);
+// 	tokenArr = mytoc(testCase1, ':');
+// 	free(tokenArr);
+
 	/*Loop requesting user input and calling mytoc() for
-	  corresponding input. Quits when exit is typed.
-	 */
+	corresponding input. Quits when exit is typed.
+	*/
 	do{
 		write(1, "$ \n",2);
 		read(0, userInput, MAXLINE);
 		/*Checks if exit was typed prior to calling mytoc()*/
 		if(terminationCheck(userInput) != 0){
 			tokenArr = mytoc(userInput, ' ');
+			forkAndExecute(tokenArr);
 			free(tokenArr);
 		}
 	}while(terminationCheck(userInput) != 0 || userInput[0]=='\n');
