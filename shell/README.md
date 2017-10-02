@@ -1,19 +1,21 @@
-# os-shell-lab-2-Part-1
+# os-shell-lab-2-Part-2
 # Source code by Kristian Villanueva
 
 ## Introduction
 
-•Utilizing the tokenizer from lab 1, lab 2 part 1 is intended to execute bin commands in two different formats (e.g. /bin/ls,ls).
+•Utilizing the tokenizer from lab 1, lab 2 part 2 is intended to execute bin commands in two different formats (e.g. /bin/ls,ls), pipe commands, background tasks, and directory changes.
 
 ## Code Directory
 
 •test.c: Reguests and reads in user input and sends the whole string to mytoc()
 •mytoc.c: Separates the whole string into separate tokens based on entered
 delimiter, then sends values to forkAndExecute.c to execute user input.
-•forkAndExecute.c: Attempts to execute commands entered in test.c. Works for tow different formats (e.g. /bin/ls,ls);
-however calls to some commands, such as date, return some errors. 
+•forkAndExecute.c: Attempts to execute commands entered in test.c. Works for two different formats (e.g. /bin/ls,ls).
+•forkAndExecuteWithPipes.c: is used when test.c detects a '|' in the returned pointer to pointer array.
+Once detected an initial fork attempts to execute the first command (e.g. /bin/ls). If execution is succesful the second command is attempted by forking in the else statement and then executing within this fork (e.g. /usr/bin/wc); however running this type of command will terminate the shell. I was having an issue where the execution would not close and it would continually print. (I found the fork within the else statement in this stack overvflow post: https://stackoverflow.com/questions/36585896/piping-two-child-processes-one-for-ls-the-other-for-sort-but-sort-is-not-work)
 •helloWorld.c: test executable file. Runs when hi is entered in command line.
 •forkAndExecute.h: Header file that declares the forkAndExecute() function in forkAndExecute.c
+•forkAndExecuteWithPipes.h: Header file that declares the forkAndExecuteWithPipes() function in forkAndExecuteWithPipes.c
 •mytoc.h: Header file that declares the mytoc() function in mytoc.c
 •Makefile: contains compilation and run instructions for test.c, mytoc.c, helloWorld.c, and forkAndExecute.c.
 
@@ -21,6 +23,6 @@ however calls to some commands, such as date, return some errors.
 
 •Compilation: With Makefile in the same directory, type make to compile files
 •Run: After compilation, type ./test, and the program will run.
-•Test: Commands of the type /bin/ls wokr correctly. Single commands of the type ls do not mirror /bin commands. 
-Enterring hi will test running an executable file. 
+•Test: Commands of the type /bin/ls and ls work correctly. Pipe commands work; however they will exit the shell upon completion. 
+Enterring "hi" will test running an executable file within the shell. 
 •Type exit to exit shell
