@@ -3,8 +3,8 @@ all: $(EFILES)
 
 CFLAGS = -g -O2
 
-test: test.o mytoc.o forkAndExecute.o 
-	cc -o test test.o mytoc.o forkAndExecute.o 
+test: test.o mytoc.o forkAndExecute.o forkAndExecuteWithPipes.o
+	cc -o test test.o mytoc.o forkAndExecute.o forkAndExecuteWithPipes.o
 
 helloWorld: helloWorld.o
 

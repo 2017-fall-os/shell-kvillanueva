@@ -6,6 +6,6 @@
 #ifndef FORKANDEXECUTE_H_
 #define FORKANDEXECUTE_H_
 
-int forkAndExecute(char**argv);
+void forkAndExecute(char**argv);
 
 #endif /* FORKANDEXECUTE_H_ */
