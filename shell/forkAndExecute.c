@@ -41,7 +41,7 @@ void forkAndExecute(char**argv){
 			arr=mytoc(path,':');
 			for(int j=0;arr[j]!=NULL;j++){
 				concat=concatenate(argv,arr[j],0);
-				printf("After concatenation: %s \n", concat);
+				// printf("After concatenation: %s \n", concat);
 				char* newargv[]={concat,NULL};
 				retVal2 = execve(concat,newargv,NULL);
 			}
@@ -52,9 +52,7 @@ void forkAndExecute(char**argv){
 			int retVal3 = execve("./helloWorld",&argv[0],envp);
 		}
 		printf("command not found \n");
-		fflush(stdout);
 		printf("Program terminated with exit code %d. \n", retVal);
-		fflush(stdout);
 		close(0);
 		exit(2);
 	}
