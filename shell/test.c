@@ -16,6 +16,7 @@ int main(){
 	variable tokenArr from call to mytoc()*/
 	char userInput [MAXLINE];
 	char **tokenArr;
+	int check =0;
 
 	/*Loop requesting user input and calling mytoc() for
 	corresponding input. Quits when exit is typed.
@@ -27,7 +28,8 @@ int main(){
 		if(terminationCheck(userInput) != 0){
 			tokenArr = mytoc(userInput, ' ');
 			if(containsPipe(tokenArr)==1){
-				forkAndExecuteWithPipes(tokenArr);
+				check = forkAndExecuteWithPipes(tokenArr); 
+				printf("%d \n", check);
 			}
 			else{
 				forkAndExecute(tokenArr);
