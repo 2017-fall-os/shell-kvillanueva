@@ -29,7 +29,6 @@ int main(){
 			tokenArr = mytoc(userInput, ' ');
 			if(containsPipe(tokenArr)==1){
 				check = forkAndExecuteWithPipes(tokenArr); 
-				printf("%d \n", check);
 			}
 			else{
 				forkAndExecute(tokenArr);
