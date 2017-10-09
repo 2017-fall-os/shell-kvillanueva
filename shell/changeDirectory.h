@@ -2,10 +2,9 @@
 Name: Kristian Villanueva
 Last Modification: 10/8/17
 */
-
-#ifndef FORKANDEXECUTE_H_
+#ifndef CHANGEDIRECTORY_H_
 #define FORKANDEXECUTE_H_
 
-void forkAndExecute(char**argv);
+void changeDirectory(char**argv);
 
-#endif /* FORKANDEXECUTE_H_ */
+#endif /* CHANGEDIRECTORY_H_ */

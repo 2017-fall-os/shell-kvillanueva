@@ -1,6 +1,6 @@
 /*Lab2: Shell-Part2
 Name: Kristian Villanueva
-Last Modification: 10/1/17
+Last Modification: 10/8/17
 */
 #include <stdio.h>
 #include<unistd.h>
@@ -8,9 +8,11 @@ Last Modification: 10/1/17
 #include "mytoc.h"
 #include "forkAndExecute.h"
 #include "forkAndExecuteWithPipes.h"
+#include "changeDirectory.h"
 #define MAXLINE 10000
 int terminationCheck(char input []);
 int containsPipe(char**userIn);
+int containsCD(char**userIn);
 int main(){
 	/*Initial declaration for userInput and the receiving
 	variable tokenArr from call to mytoc()*/
@@ -27,7 +29,10 @@ int main(){
 		/*Checks if exit was typed prior to calling mytoc()*/
 		if(terminationCheck(userInput) != 0){
 			tokenArr = mytoc(userInput, ' ');
-			if(containsPipe(tokenArr)==1){
+			if(containsCD(tokenArr)==1){
+				
+			}
+			else if(containsPipe(tokenArr)==1){
 				check = forkAndExecuteWithPipes(tokenArr); 
 			}
 			else{
@@ -71,6 +76,14 @@ int containsPipe(char**userIn){
 				return 1;
 			}
 		}
+	}
+	return 0;
+}
+
+int containsCD(char**userIn){
+	// printf("Got to containsPipe\n");
+	if(userIn[0][0]=='c' && userIn[0][1]=='d'&& userIn[0][2]=='\0'){
+		return 1;
 	}
 	return 0;
 }

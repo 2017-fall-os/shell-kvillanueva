@@ -1,7 +1,7 @@
-/*Lab2: Shell-Part1
-  Name: Kristian Villanueva
-  Last Modification: 9/24/17
- */
+/*Lab2: Shell-Part2
+Name: Kristian Villanueva
+Last Modification: 10/8/17
+*/
 #ifndef MYTOC_H_
 #define MYTOC_H_
 
