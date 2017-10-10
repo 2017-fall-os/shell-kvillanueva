@@ -25,7 +25,10 @@ int main(){
 	*/
 	do{
 		write(1, "$ \n",2);
-		read(0, userInput, MAXLINE);
+		int bytesRead = read(0, userInput, MAXLINE);
+		if(bytesRead==0){
+			exit(0);
+		}
 		/*Checks if exit was typed prior to calling mytoc()*/
 		if(terminationCheck(userInput) != 0){
 			tokenArr = mytoc(userInput, ' ');
