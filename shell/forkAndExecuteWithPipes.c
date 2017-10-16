@@ -13,7 +13,11 @@ Last Modification: 10/8/17
 #include "mytoc.h"
 
 char* concatenatePipes(char**userIn,char*path);
+int counBeforePipe(char**userIn);
+int countAfterPipe(char**userIn);
+int afterPipeIndex(char**userIn);
 char buff[10000];
+char buff2[10000];
 /*attempts to execute pipe commands*/
 int forkAndExecuteWithPipes(char**argv){
 	int stdout = dup(1);
@@ -28,6 +32,7 @@ int forkAndExecuteWithPipes(char**argv){
 	int retVal4=0;
 	
 	char *concat;
+	char* sc;
 	pipe(pipeFds);
 	/*Initiates first fork to run first command (e.g. /bin/ls)*/
 	pid = fork();
@@ -61,52 +66,39 @@ int forkAndExecuteWithPipes(char**argv){
 		if(waitVal == pid) {
 			// printf("Gets to first waitval comparison\n");
 			pid2 = fork();
-			// char * newargv []={argv[2],NULL};
 			close(0);
 			dup(pipeFds[0]);
 			close(pipeFds[0]);
 			close(pipeFds[1]);
 			/*Second fork to initiate second command(e.g. /usr/bin/wc)*/
 			if(pid2==0){
-				if(argv[3]==NULL){
-					/*Executs commands similar to /usr/bin/sort */
-					char * newargv []={argv[2],NULL};
-					retVal3 = execve(argv[2],newargv,NULL);
-					if(retVal3 == -1){
-						char *path;
-						path=getenv("PATH");
-						char **arr;
-						arr=mytoc(path,':');
-						for(int j=0;arr[j]!=NULL;j++){
-							concat=concatenatePipes(newargv,arr[j]);
-							// printf("After concatenation: %s \n", concat);
-							char* newargv2[]={concat,NULL};
-							retVal4 = execve(concat,newargv2,NULL);
-						}
-						free(arr);
-					}
+				/*Executs commands similar to /usr/bin/sort */
+				int afterPipe = countAfterPipe(argv);
+				int afterPIndex=afterPipeIndex(argv);
+				int startIndex = afterPIndex;
+				char * newargv [afterPipe+1];
+				for(int i =0; i<afterPipe;i++){
+					newargv[i]=argv[afterPIndex];
+					afterPIndex++;
 				}
-				else{
-					/*Executs commands similar to /usr/bin/sort -r */
-					char * newargv []={argv[2],argv[3],NULL};
-					retVal3 = execve(argv[2],newargv,NULL);
-					if(retVal3 == -1){
-						char *path;
-						path=getenv("PATH");
-						char **arr;
-						arr=mytoc(path,':');
-						for(int j=0;arr[j]!=NULL;j++){
-							char * firstCommand []={argv[2],NULL};
-							concat=concatenatePipes(firstCommand,arr[j]);
-							// printf("After concatenation: %s \n", concat);
-							char* newargv2[]={concat,argv[3],NULL};
-							retVal4 = execve(concat,newargv,NULL);
-						}
-						free(arr);
+				newargv[afterPipe]=NULL;
+				retVal3 = execve(argv[startIndex],newargv,NULL);
+				if(retVal3 == -1){
+					char *path;
+					path=getenv("PATH");
+					char **arr;
+					arr=mytoc(path,':');
+					for(int j=0;arr[j]!=NULL;j++){
+						char * firstCommand []={argv[startIndex],NULL};
+						concat=concatenatePipes(firstCommand,arr[j]);
+						printf("After concatenation: %s \n", concat);
+						newargv[0]=concat;
+						retVal4 = execve(concat,newargv,NULL);
 					}
+					free(arr);
 				}
 				printf("command not found \n");
-				printf("Program terminated with exit code %d. \n", retVal2);
+				printf("Program terminated with exit code %d. \n", retVal3);
 				exit(1);
 			}
 			else {
@@ -146,4 +138,50 @@ char* concatenatePipes(char**userIn,char*path){
 	buff[i]='\0';
 	// printf("After concatenation(still in func): %s \n", buff  );
 	return buff;
+}
+int counBeforePipe(char**userIn){
+	int count = 0;
+	for(int i =0;userIn[i]!=NULL;i++){
+		for(int j =0; userIn[i][j]!='\0';j++){
+			if(userIn[i][j]=='|'){
+				return count;
+			}
+			if(j==0){
+				count++;
+			}
+		}
+	}
+	return count;
+}
+
+int countAfterPipe(char**userIn){
+	int count = 0;
+	int check=0;
+	for(int i =0;userIn[i]!=NULL;i++){
+		for(int j =0; userIn[i][j]!='\0';j++){
+			if(userIn[i][j]=='|'){
+				check=1;
+			}
+			else if(check==1&&j==0){
+				count++;
+			}
+		}
+	}
+	return count;
+}
+
+int afterPipeIndex(char**userIn){
+	int index = 0;
+	int check=0;
+	for(int i =0;userIn[i]!=NULL;i++){
+		for(int j =0; userIn[i][j]!='\0';j++){
+			if(userIn[i][j]=='|'){
+				check=1;
+			}
+			else if(check==1){
+				return i;
+			}
+		}
+	}
+	return index;
 }

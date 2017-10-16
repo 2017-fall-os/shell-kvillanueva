@@ -50,7 +50,7 @@ char ** mytoc(char *str, char delim){
 	/*Copies tokens into appropriate spot in tokenArr*/
 	for(int i=0; i<tArrLength-1;i++){
 		fillTokenArr(str, tokenArr,i,tokenLengthsArr[i],delim);
-		//		tokenArr[i][tokenLengthsArr[i]-1]='\0';
+		// tokenArr[i][tokenLengthsArr[i]-1]='\0';
 	}
 	/*Sets final indices to null character*/
 	//	tokenArr[tArrLength-1][tokenLengthsArr[tArrLength-1]]='\0';

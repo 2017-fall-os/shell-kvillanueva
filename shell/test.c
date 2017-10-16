@@ -8,7 +8,6 @@ Last Modification: 10/8/17
 #include "mytoc.h"
 #include "forkAndExecute.h"
 #include "forkAndExecuteWithPipes.h"
-#include "changeDirectory.h"
 #define MAXLINE 10000
 int terminationCheck(char input []);
 int containsPipe(char**userIn);
@@ -24,19 +23,21 @@ int main(){
 	corresponding input. Quits when exit is typed.
 	*/
 	do{
-		write(1, "$ \n",2);
+		write(0, "$ \n",2);
 		int bytesRead = read(0, userInput, MAXLINE);
 		if(bytesRead==0){
 			exit(0);
 		}
 		/*Checks if exit was typed prior to calling mytoc()*/
-		if(terminationCheck(userInput) != 0){
+		if(terminationCheck(userInput) != 0 && userInput[0]!='\n'){
 			tokenArr = mytoc(userInput, ' ');
 			if(containsCD(tokenArr)==1){
-				
+				chdir(tokenArr[1]);
 			}
 			else if(containsPipe(tokenArr)==1){
+				// char **tokenizedPipe=mytoc(userInput, '|');
 				check = forkAndExecuteWithPipes(tokenArr); 
+				// free(tokenizedPipe);
 			}
 			else{
 				forkAndExecute(tokenArr);
