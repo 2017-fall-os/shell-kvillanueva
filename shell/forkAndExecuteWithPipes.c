@@ -9,7 +9,7 @@ Last Modification: 10/8/17
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include "forkAndExecute.h"
+#include "forkAndExecuteWithPipes.h"
 #include "mytoc.h"
 
 char* concatenatePipes(char**userIn,char*path);
@@ -37,11 +37,18 @@ int forkAndExecuteWithPipes(char**argv){
 	/*Initiates first fork to run first command (e.g. /bin/ls)*/
 	pid = fork();
 	if(pid==0){
-		char* newargv []={argv[0],NULL};
+		// char* newargv []={argv[0],NULL};
 		close(1);
 		dup(pipeFds[1]);
 		close(pipeFds[0]);
 		close(pipeFds[1]);
+		int beforePipe = counBeforePipe(argv);
+		char * newargv [beforePipe+1];
+		int i =0;
+		for(; i<beforePipe;i++){
+			newargv[i]=argv[i];
+		}
+		newargv[beforePipe]=NULL;
 		retVal=execve(argv[0],newargv,envp);
 		if(retVal == -1){
 			char *path;
@@ -49,9 +56,10 @@ int forkAndExecuteWithPipes(char**argv){
 			char **arr;
 			arr=mytoc(path,':');
 			for(int j=0;arr[j]!=NULL;j++){
-				concat=concatenatePipes(newargv,arr[j]);
+				char * firstCommand []={argv[0],NULL};
+				concat=concatenatePipes(firstCommand,arr[j]);
 				// printf("After concatenation: %s \n", concat);
-				char* newargv2[]={concat,NULL};
+				newargv[0]=concat;
 				retVal2 = execve(concat,newargv,NULL);
 			}
 			free(arr);
@@ -91,7 +99,7 @@ int forkAndExecuteWithPipes(char**argv){
 					for(int j=0;arr[j]!=NULL;j++){
 						char * firstCommand []={argv[startIndex],NULL};
 						concat=concatenatePipes(firstCommand,arr[j]);
-						printf("After concatenation: %s \n", concat);
+						// printf("After concatenation: %s \n", concat);
 						newargv[0]=concat;
 						retVal4 = execve(concat,newargv,NULL);
 					}

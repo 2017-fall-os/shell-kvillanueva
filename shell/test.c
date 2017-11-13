@@ -8,10 +8,12 @@ Last Modification: 10/8/17
 #include "mytoc.h"
 #include "forkAndExecute.h"
 #include "forkAndExecuteWithPipes.h"
+#include "forkAndBackground.h"
 #define MAXLINE 10000
 int terminationCheck(char input []);
 int containsPipe(char**userIn);
 int containsCD(char**userIn);
+int containsAmpersand(char**userIn);
 int main(){
 	/*Initial declaration for userInput and the receiving
 	variable tokenArr from call to mytoc()*/
@@ -33,6 +35,9 @@ int main(){
 			tokenArr = mytoc(userInput, ' ');
 			if(containsCD(tokenArr)==1){
 				chdir(tokenArr[1]);
+			}
+			else if(containsAmpersand(tokenArr)==1){
+				forkAndBackground(tokenArr);
 			}
 			else if(containsPipe(tokenArr)==1){
 				// char **tokenizedPipe=mytoc(userInput, '|');
@@ -77,6 +82,18 @@ int containsPipe(char**userIn){
 	for(int j=0;userIn[j]!=NULL;j++){
 		for(int k=0;userIn[j][k]!='\0';k++){
 			if(userIn[j][k]=='|'){
+				return 1;
+			}
+		}
+	}
+	return 0;
+}
+
+int containsAmpersand(char**userIn){
+	// printf("Got to containsPipe\n");
+	for(int j=0;userIn[j]!=NULL;j++){
+		for(int k=0;userIn[j][k]!='\0';k++){
+			if(userIn[j][k]=='&'){
 				return 1;
 			}
 		}

@@ -9,15 +9,15 @@ Last Modification: 10/8/17
 #include <fcntl.h>
 #include <sys/types.h>
 #include <sys/wait.h>
-#include "forkAndExecute.h"
+#include "forkAndBackground.h"
 #include "mytoc.h"
 
-char* concatenate(char**userIn,char*path, int pipeIndicator);
-int counBeforeSpace(char**userIn);
+char* concatenateFB(char**userIn,char*path, int pipeIndicator);
+int countBeforeAmp(char**userIn);
 char buff[10000];
 
 /*Forks and attempts to execute instructions*/
-void forkAndExecute(char**argv){
+void forkAndBackground(char**argv){
 	int *pipeFds;
 	pipeFds = (int *) calloc(2, sizeof(int));
 	pipe(pipeFds);
@@ -39,7 +39,7 @@ void forkAndExecute(char**argv){
 			path=getenv("PATH");
 			char **arr;
 			arr=mytoc(path,':');
-			int beforeSp = counBeforeSpace(argv);
+			int beforeSp = countBeforeAmp(argv);
 			char * newargv [beforeSp+1];
 			int i =0;
 			for(; i<beforeSp;i++){
@@ -48,7 +48,7 @@ void forkAndExecute(char**argv){
 			newargv[beforeSp]=NULL;
 			for(int j=0;arr[j]!=NULL;j++){
 				char * firstCommand []={argv[0],NULL};
-				concat=concatenate(firstCommand,arr[j],0);
+				concat=concatenateFB(firstCommand,arr[j],0);
 				// printf("After concatenation: %s \n", concat);
 				newargv[0]=concat;
 				retVal2 = execve(concat,newargv,NULL);
@@ -64,21 +64,11 @@ void forkAndExecute(char**argv){
 		close(0);
 		exit(2);
 	}
-	else { 			/* parent */
-		int waitVal, waitStatus;
-		waitVal = waitpid(pid, &waitStatus, 0);
-		if (waitVal == pid) {
-			return;
-			close(0);
-		}
-		return;
-		close(0);
-	}
 }
 
 /*Concatenates input string to run single input commands 
-  with corresponding path.(e.g. ls)*/
-char* concatenate(char**userIn,char*path, int pipeIndicator){
+with corresponding path.(e.g. ls)*/
+char* concatenateFB(char**userIn,char*path, int pipeIndicator){
 	int i =0;
 	for(;path[i]!='\0';i++){
 		buff[i]=path[i];
@@ -96,11 +86,11 @@ char* concatenate(char**userIn,char*path, int pipeIndicator){
 	return buff;
 }
 
-int counBeforeSpace(char**userIn){
+int countBeforeAmp(char**userIn){
 	int count = 0;
 	for(int i =0;userIn[i]!=NULL;i++){
 		for(int j =0; userIn[i][j]!='\0';j++){
-			if(userIn[i][j]==' '){
+			if(userIn[i][j]=='&'){
 				return count;
 			}
 			if(j==0){
